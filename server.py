@@ -9,6 +9,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "752398u5&9563!!hms"
 
+
 @app.route('/')
 def splashpage():
     """Mainpage."""
@@ -16,22 +17,11 @@ def splashpage():
     return render_template("splashpage.html")
 
 
-@app.route('/get-markove-tweet.json')
+@app.route('/get-markov-tweet.json')
 def send_tweet():
     """Responds to ajax request for a new Markov tweets."""
 
     pass
-
-
-
-
-
-
-
-
-
-
-
 
 
 
