@@ -13,7 +13,7 @@ def connect_twitter_api(twitter_handle):
     access_token_key=os.environ["TWITTER_ACCESS_TOKEN_KEY"]
     access_token_secret=os.environ["TWITTER_ACCESS_TOKEN_SECRET"]
 
-    #tweepy library to authenticate with OAuth
+    #tweepy library for OAuth authentification
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token_key, access_token_secret)
 
@@ -26,5 +26,68 @@ def connect_twitter_api(twitter_handle):
     return user_tweets_string
 
 
+
+
 def make_markov_chain(user_tweets_string):
-    """Takes in user tweets as one long string; outputs dictionary of Markov chains."""
+    """Takes in user tweets as one string; outputs dictionary of Markov chains.
+       Ex. key-val pair: {('I', 'love') : [mangoes, apples, mangoes, oranges]}"""
+
+    mar_chains = {}
+
+    words = user_tweets_string.split()
+
+    for index in range(len(words) - 2):
+        mar_key = (words[index], words[index + 1])
+        mar_val = words[index + 2]
+
+        mar_chains.setdefault(mar_key, []).append(mar_val)
+
+    return mar_chains
+
+
+
+def make_markov_tweet(mar_chains):
+    """Takes in Markov chains dictionary and returns new generated tweet."""
+
+    # choose at random a key pair of words to begin with from keys list
+    mar_key = choice(mar_chains.keys())
+
+    # start_words will begin the tweet
+    start_words = [mar_key[0], mar_key[1]]
+
+    # initialize chars to later restrict to 140 (tweet char limit)
+    chars = 0
+
+    while mar_key in mar_chains:
+        new_word = choice(mar_chains[mar_key])
+        if chars + len(new_word) > 140:
+            break
+        start_words.append(new_word)
+        mar_key = (mar_key[1], new_word)
+        chars = len(" ".join(start_words))
+
+    return " ".join(start_words)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
