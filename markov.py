@@ -6,6 +6,8 @@ import twitter
 import tweepy
 from random import choice
 
+markov_cache = {}
+
 
 def connect_twitter_api(twitter_handle):
     """Connect to Twitter API and authenticate."""
@@ -22,21 +24,19 @@ def connect_twitter_api(twitter_handle):
     api = tweepy.API(auth)
 
     # get user tweets, parameters: screen_name, # tweets, include re-tweets (T/F)
-    user_tweet_info = (api.user_timeline(screen_name = twitter_handle, 
-                       exclude_replies = True, include_rts = False, count=200))
+    user_tweet_info = api.user_timeline(screen_name = twitter_handle, exclude_replies = True, include_rts = False, count=200)
 
+    print "777777777777777777777"
+    print "777777777777777777777"
     user_tweets_string = ""
     for status in user_tweet_info:
         user_tweets_string += status.text
 
     print twitter_handle
-    print "-------------------"
+    print '99999999999999'
     print user_tweets_string
-    print "-------------------"
-    print type(user_tweets_string)
 
     return user_tweets_string
-
 
 
 
@@ -44,19 +44,28 @@ def make_markov_chain(user_tweets_string):
     """Takes in user tweets as one string; outputs dictionary of Markov chains.
        Ex. key-val pair: {('I', 'love') : [mangoes, apples, mangoes, oranges]}"""
 
-    mar_chains = {}
+    # does the user_tweets_string exist in my cache? yes, then take value,
+    if user_tweets_string in markov_cache.values():
+        mar_chains = markov_cache[user_tweets_string]
 
-    words = user_tweets_string.split()
+        return mar_chains 
 
-    # iterate through words; save word pairs in tuples as keys & connected
-    # words in list as values
-    for index in range(len(words) - 2):
-        mar_key = (words[index], words[index + 1])
-        mar_val = words[index + 2]
+    else:
+        mar_chains = {}
 
-        mar_chains.setdefault(mar_key, []).append(mar_val)
+        words = user_tweets_string.split()
 
-    return mar_chains
+        # iterate through words; save word pairs in tuples as keys & connected
+        # words in list as values
+        for index in range(len(words) - 2):
+            mar_key = (words[index], words[index + 1])
+            mar_val = words[index + 2]
+
+            mar_chains.setdefault(mar_key, []).append(mar_val)
+
+        markov_cache[user_tweets_string] = mar_chains
+
+        return mar_chains
 
 
 
@@ -83,12 +92,22 @@ def make_markov_tweet(mar_chains):
     return " ".join(start_words)
 
 
+# def memoize_chains() 
+
+# # key: parameter
+# # value: output
+
+# # key will be old user tweets string
+# # value - markov chains 
+# # NOT the markov tweet
 
 
 
 
-
-
+# periodically check cache, anything older (store timestamp - anything older than a day get rid of, )
+# or build in expiration attribute. 
+# once a day, cronjob would check cache, 
+#'cache expiration'
 
 
 

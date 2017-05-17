@@ -1,7 +1,8 @@
 # encoding=utf8  
 """The Markov tweet generator flask app server file."""
 
-from flask import (Flask, jsonify, render_template, request, make_response)
+from flask import (Flask, jsonify, render_template, request)
+from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
 from markov import connect_twitter_api, make_markov_chain, make_markov_tweet
 
@@ -24,6 +25,8 @@ def send_tweet():
 
     tweet_to_send = {}
     twitter_handle = request.args.get("twitter_handle")
+    print twitter_handle
+    print '888888888888888'
     user_tweets_string = connect_twitter_api(twitter_handle)
     mar_chains = make_markov_chain(user_tweets_string)
     tweet_content = make_markov_tweet(mar_chains)

@@ -2,10 +2,13 @@ $(document).ready(function(){
 
 
 function displayTweet(event) {
-    $.get("/show-markov-tweet", function(results) {
-                                var tweet_content = results.tweet;
-                                $('#tweet-spot').html(results.tweet_content);
+    var twitter_handle = $("#twitter_handle").val();
+    $.get("/show-markov-tweet", {"twitter_handle" : twitter_handle}, 
+                                function(results) {
+                                $('#tweet-spot').html(results.tweet);
+    
     });  
+    event.preventDefault();
 }
 
 
