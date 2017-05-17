@@ -1,8 +1,9 @@
-# encoding=utf8 
+# encoding=utf8  
 """The Markov tweet generator flask app server file."""
 
 from flask import (Flask, jsonify, render_template, request, make_response)
 from flask_debugtoolbar import DebugToolbarExtension
+from markov import connect_twitter_api, make_markov_chain, make_markov_tweet
 
 app = Flask(__name__)
 
@@ -17,11 +18,19 @@ def splashpage():
     return render_template("splashpage.html")
 
 
-@app.route('/get-markov-tweet.json')
+@app.route('/show-markov-tweet')
 def send_tweet():
-    """Responds to ajax request for a new Markov tweets."""
+    """Responds to ajax request for a new Markov tweet."""
 
-    pass
+    tweet_to_send = {}
+    twitter_handle = request.args.get("twitter_handle")
+    user_tweets_string = connect_twitter_api(twitter_handle)
+    mar_chains = make_markov_chain(user_tweets_string)
+    tweet_content = make_markov_tweet(mar_chains)
+
+    tweet_to_send['tweet'] = tweet_content
+
+    return jsonify(tweet_to_send)
 
 
 

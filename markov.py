@@ -1,3 +1,5 @@
+# encoding=utf8  
+from __future__ import unicode_literals
 from flask import Flask
 import os
 import twitter
@@ -20,8 +22,18 @@ def connect_twitter_api(twitter_handle):
     api = tweepy.API(auth)
 
     # get user tweets, parameters: screen_name, # tweets, include re-tweets (T/F)
-    user_tweets_string = api.user_timeline(screen_name = twitter_handle, include_rts = True, count=20)
+    user_tweet_info = (api.user_timeline(screen_name = twitter_handle, 
+                       exclude_replies = True, include_rts = False, count=200))
 
+    user_tweets_string = ""
+    for status in user_tweet_info:
+        user_tweets_string += status.text
+
+    print twitter_handle
+    print "-------------------"
+    print user_tweets_string
+    print "-------------------"
+    print type(user_tweets_string)
 
     return user_tweets_string
 
@@ -36,6 +48,8 @@ def make_markov_chain(user_tweets_string):
 
     words = user_tweets_string.split()
 
+    # iterate through words; save word pairs in tuples as keys & connected
+    # words in list as values
     for index in range(len(words) - 2):
         mar_key = (words[index], words[index + 1])
         mar_val = words[index + 2]
