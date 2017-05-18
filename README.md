@@ -27,7 +27,7 @@ Markov Tweet Generator is a web app that turns tweets into Markov chains and gen
 
 ### Test Coverage
  
-![alt text](static/css/coverage.png)
+![alt text](static/css/test_coverage.png)
 
  
 
