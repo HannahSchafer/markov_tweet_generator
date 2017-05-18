@@ -39,7 +39,7 @@ Twitter API
 
 ### Technologies
 Flask, PostgreSQL,
-JQuery, AJAX
+JQuery, AJAX,
 pickle, tweepy, virtualenv
  
 
