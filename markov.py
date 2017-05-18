@@ -94,35 +94,6 @@ def make_markov_tweet(mar_chains):
     return " ".join(start_words)
 
 
-# def memoize_chains() 
-
-# # key: parameter
-# # value: output
-
-# # key will be old user tweets string
-# # value - markov chains 
-# # NOT the markov tweet
-
-
-
-
-# periodically check cache, anything older (store timestamp - anything older than a day get rid of, )
-# or build in expiration attribute. 
-# once a day, cronjob would check cache, 
-#'cache expiration'
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
