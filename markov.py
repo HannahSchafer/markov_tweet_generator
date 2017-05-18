@@ -25,7 +25,8 @@ def connect_twitter_api(twitter_handle):
     api = tweepy.API(auth)
 
     # get user tweets, parameters: screen_name, # tweets, include re-tweets (T/F)
-    user_tweet_info = api.user_timeline(screen_name = twitter_handle, exclude_replies = True, include_rts = False, count=200)
+    user_tweet_info = (api.user_timeline(screen_name = twitter_handle, 
+                       exclude_replies = True, include_rts = False, count=200))
 
    
     user_tweets_string = ""

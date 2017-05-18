@@ -38,7 +38,7 @@ def send_tweet():
 
 if __name__ == "__main__":
 
-    app.debug = True
+    app.debug = False
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)

@@ -1,0 +1,17 @@
+body {
+    background-image: url("css/brickwall.png");
+    font-family: Verdana;
+  
+}
+
+.center {
+
+    text-align: center;
+    margin-top: 140px;
+
+}
+
+#tweet-spot {
+
+    margin: 20px;
+}
