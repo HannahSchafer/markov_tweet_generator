@@ -25,8 +25,7 @@ def send_tweet():
 
     tweet_to_send = {}
     twitter_handle = request.args.get("twitter_handle")
-    print twitter_handle
-    print '888888888888888'
+
     user_tweets_string = connect_twitter_api(twitter_handle)
     mar_chains = make_markov_chain(user_tweets_string)
     tweet_content = make_markov_tweet(mar_chains)

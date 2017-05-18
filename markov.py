@@ -5,6 +5,7 @@ import os
 import twitter
 import tweepy
 from random import choice
+import pickle
 
 markov_cache = {}
 
@@ -26,15 +27,14 @@ def connect_twitter_api(twitter_handle):
     # get user tweets, parameters: screen_name, # tweets, include re-tweets (T/F)
     user_tweet_info = api.user_timeline(screen_name = twitter_handle, exclude_replies = True, include_rts = False, count=200)
 
-    print "777777777777777777777"
-    print "777777777777777777777"
+   
     user_tweets_string = ""
     for status in user_tweet_info:
         user_tweets_string += status.text
 
-    print twitter_handle
-    print '99999999999999'
-    print user_tweets_string
+    # one time use pickle file dump to use for mocking API in tests.py:
+    # twitter_data = user_tweets_string
+    # pickle.dump( twitter_data, open( "twitter_data.pickle", "wb"))
 
     return user_tweets_string
 
@@ -81,6 +81,7 @@ def make_markov_tweet(mar_chains):
     # initialize chars to later restrict to 140 (tweet char limit)
     chars = 0
 
+    # iterate through chain, add new word to starting string (limit 140 chars)
     while mar_key in mar_chains:
         new_word = choice(mar_chains[mar_key])
         if chars + len(new_word) > 140:
