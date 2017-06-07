@@ -4,7 +4,7 @@
 from flask import (Flask, jsonify, render_template, request)
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
-from markov import connect_twitter_api, make_markov_chain, make_markov_tweet
+from markov import check_cache, make_markov_tweet
 
 app = Flask(__name__)
 
@@ -26,8 +26,7 @@ def send_tweet():
     tweet_to_send = {}
     twitter_handle = request.args.get("twitter_handle")
 
-    user_tweets_string = connect_twitter_api(twitter_handle)
-    mar_chains = make_markov_chain(user_tweets_string)
+    mar_chains = check_cache(twitter_handle)
     tweet_content = make_markov_tweet(mar_chains)
 
     tweet_to_send['tweet'] = tweet_content

@@ -19,6 +19,13 @@ class MyAppUnitTestCase(TestCase):
         result = self.client.get('/')
         self.assertIn(u'<h2>Markov Tweet Generator</h2>', result.data)
 
+    def test_make_markov_chain(self):
+
+        result = markov.make_markov_chain("I am fluffy cat.")
+
+        self.assertEqual({('I', 'am') : ['fluffy'], ('am', 'fluffy') : ['cat.']}, result)
+
+
 
 
 class TwitterAPITests(TestCase):

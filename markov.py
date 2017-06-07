@@ -9,6 +9,33 @@ import pickle
 
 markov_cache = {}
 
+# user sends in twitter_handle  - server gets it
+# create a new function - takes in twitter handle, checks to see if twitter_handle is in markov_cache
+# if TH in MC, then pull and use markov_chain from cache, pass to make_markov_tweet
+# twitter_handle - key
+
+#ELSE
+# use make_markov_chain inside check cache, so that we can add new chain to the cache 
+# also connct to twitter if twitter handle not in cache
+
+def check_cache(twitter_handle):
+    """Checks cache for twitter handle. If there, use cached mar_chain, else
+        connect to API and make markov chain, cache markov chain."""
+
+    if twitter_handle in markov_cache.keys():
+        mar_chains = markov_cache[twitter_handle]
+        return mar_chains
+
+    else:
+        user_tweets_string = connect_twitter_api(twitter_handle)
+        mar_chains = make_markov_chain(user_tweets_string)
+
+        # add new mar_chain to cache
+        markov_cache[twitter_handle] = mar_chains
+
+        return mar_chains
+
+
 
 def connect_twitter_api(twitter_handle):
     """Connect to Twitter API and authenticate."""
@@ -31,7 +58,7 @@ def connect_twitter_api(twitter_handle):
    
     user_tweets_string = ""
     for status in user_tweet_info:
-        user_tweets_string += status.text
+        user_tweets_string += " " + status.text
 
     # one time use pickle file dump to use for mocking API in tests.py:
     # twitter_data = user_tweets_string
@@ -45,28 +72,20 @@ def make_markov_chain(user_tweets_string):
     """Takes in user tweets as one string; outputs dictionary of Markov chains.
        Ex. key-val pair: {('I', 'love') : [mangoes, apples, mangoes, oranges]}"""
 
-    # does the user_tweets_string exist in my cache? yes, then take value,
-    if user_tweets_string in markov_cache.values():
-        mar_chains = markov_cache[user_tweets_string]
+    
+    mar_chains = {}
 
-        return mar_chains 
+    words = user_tweets_string.split()
 
-    else:
-        mar_chains = {}
+    # iterate through words; save word pairs in tuples as keys & connected
+    # words in list as values
+    for index in range(len(words) - 2):
+        mar_key = (words[index], words[index + 1])
+        mar_val = words[index + 2]
 
-        words = user_tweets_string.split()
+        mar_chains.setdefault(mar_key, []).append(mar_val)
 
-        # iterate through words; save word pairs in tuples as keys & connected
-        # words in list as values
-        for index in range(len(words) - 2):
-            mar_key = (words[index], words[index + 1])
-            mar_val = words[index + 2]
-
-            mar_chains.setdefault(mar_key, []).append(mar_val)
-
-        markov_cache[user_tweets_string] = mar_chains
-
-        return mar_chains
+    return mar_chains
 
 
 
